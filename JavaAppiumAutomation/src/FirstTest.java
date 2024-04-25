@@ -107,6 +107,36 @@ public class FirstTest {
         Assert.assertTrue(resultsNotPresent);
     }
 
+    @Test
+    public void testCheckWordsInSearch()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find Search Wikipedia input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find Search input",
+                5
+        );
+
+        WebElement results = waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "Cannot present any results of search",
+                15
+        );
+
+        List<WebElement> resultElements = results.findElements(By.id("org.wikipedia:id/page_list_item_title"));
+
+        for(WebElement element : resultElements) {
+            String element_text = element.getAttribute("text");
+            Assert.assertTrue("Not contains expected text",element_text.toUpperCase().contains("JAVA"));
+        }
+    }
+
     private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.click();
