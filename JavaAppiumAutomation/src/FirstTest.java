@@ -261,6 +261,48 @@ public class FirstTest {
         Assert.assertEquals("Articles not the same", search_line, title_article);
     }
 
+    @Test
+    public void testCheckTitleElement()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Test is failed because onboarding page is not skipped",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find Search Wikipedia input",
+                5
+        );
+
+        String search_line = "Java";
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                search_line,
+                "Cannot find Search input",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_description'][@text='Object-oriented programming language']"),
+                "Cannot find needed article in search results",
+                5
+        );
+
+        WebElement containerElement = waitForElementPresent(
+                By.id("org.wikipedia:id/page_contents_container"),
+                "Cannot find elements container",
+                0
+        );
+
+        List<WebElement> textElements = containerElement.findElements(By.className("android.widget.TextView"));
+
+        String title = textElements.get(0).getAttribute("text");
+
+        Assert.assertNotNull("Title is null",title);
+    }
+
     private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.click();
