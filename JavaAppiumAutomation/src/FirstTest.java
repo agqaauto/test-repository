@@ -251,14 +251,17 @@ public class FirstTest {
                 15
         );
 
-        String title_article = waitForElementAndGetAttribute(
-                By.xpath("//*[@text='" + search_line + "']"),
-                "text",
-                "Title of article is not present",
-                15
+        WebElement container_element = waitForElementPresent(
+                By.id("org.wikipedia:id/page_contents_container"),
+                "Cannot find elements container",
+                0
         );
 
-        Assert.assertEquals("Articles not the same", search_line, title_article);
+        List<WebElement> text_elements = container_element.findElements(By.className("android.widget.TextView"));
+
+        String title = text_elements.get(0).getAttribute("text");
+
+        Assert.assertEquals("Articles not the same", search_line, title);
     }
 
     @Test
@@ -290,15 +293,15 @@ public class FirstTest {
                 5
         );
 
-        WebElement containerElement = waitForElementPresent(
+        WebElement container_element = waitForElementPresent(
                 By.id("org.wikipedia:id/page_contents_container"),
                 "Cannot find elements container",
                 0
         );
 
-        List<WebElement> textElements = containerElement.findElements(By.className("android.widget.TextView"));
+        List<WebElement> text_elements = container_element.findElements(By.className("android.widget.TextView"));
 
-        String title = textElements.get(0).getAttribute("text");
+        String title = text_elements.get(0).getAttribute("text");
 
         Assert.assertNotNull("Title is null",title);
     }
